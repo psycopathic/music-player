@@ -9,8 +9,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack.Screen name="index" options={{title:"My Music app"}}/>
-      <Stack.Screen name="player" options={{title:"Player"}}/>
+      <Stack screenOptions={{ headerShown: false }} />
     </ThemeProvider>
   );
 }

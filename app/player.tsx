@@ -14,15 +14,16 @@ type Song = {
 const Player = () => {
   const { index, songs } = useLocalSearchParams();
   const router = useRouter();
-  const parsedSongs: Song[] = JSON.parse(songs as string);
+  const parsedSongs: Song[] = songs ? JSON.parse(songs as string) : [];
 
   const [currentIndex, setCurrentIndex] = useState(Number(index));
   const currentSong = parsedSongs[currentIndex];
 
-  const player = useAudioPlayer(currentSong.uri);
+  const player = useAudioPlayer(currentSong?.uri ?? '');
   const status = useAudioPlayerStatus(player);
 
   useEffect(() => {
+    if (!currentSong) return;
     player.replace(currentSong.uri);
     player.play();
   }, [currentIndex]);
@@ -57,6 +58,17 @@ const Player = () => {
   const formatSongName = (name: string) => {
     return name.replace(/\.[^/.]+$/, "");
   };
+
+  if (!currentSong) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.emptyState}>
+          <Text style={styles.emptyText}>No song data</Text>
+          <Button title="Go Back" onPress={() => router.replace('/')} />
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -246,5 +258,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "500",
     color: "#111827",
+  },
+  emptyState: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#6b7280",
+    marginBottom: 16,
   },
 });

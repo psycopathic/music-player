@@ -103,6 +103,8 @@ const Index = () => {
   );
 }
 
+export default Index;
+
 const styles = StyleSheet.create({
   container: {  
     flex: 1,
